@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarifa Weekend — Settle Up 💸</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coral: #FF6B6B;
+    --ocean: #0077B6;
+    --ocean-light: #00B4D8;
+    --sand: #FFF3E0;
+    --sunset: #FF8C42;
+    --mint: #2EC4B6;
+    --dark: #1A1A2E;
+    --white: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--dark);
+    background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+    min-height: 100vh;
+    padding: 1.5rem;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .header {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .header-emoji { font-size: 3rem; margin-bottom: 0.8rem; }
+
+  .header h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+
+  .header p {
+    color: rgba(255,255,255,0.7);
+    font-size: 1.05rem;
+  }
+
+  .table-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    margin-bottom: 2rem;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  thead th {
+    background: linear-gradient(135deg, var(--ocean) 0%, var(--ocean-light) 100%);
+    color: white;
+    padding: 0.9rem 0.7rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+  }
+
+  thead th:first-child {
+    text-align: left;
+    padding-left: 1.2rem;
+  }
+
+  tbody td {
+    padding: 0.75rem 0.7rem;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+    white-space: nowrap;
+  }
+
+  tbody td:first-child {
+    text-align: left;
+    padding-left: 1.2rem;
+    font-weight: 600;
+  }
+
+  tbody tr:hover { background: rgba(0, 119, 182, 0.04); }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  .dash { color: #ccc; }
+  .total-cell { font-weight: 700; color: var(--ocean); }
+
+  tfoot td {
+    padding: 0.9rem 0.7rem;
+    text-align: center;
+    font-weight: 700;
+    background: var(--sand);
+    border-top: 2px solid var(--ocean);
+    font-size: 0.85rem;
+  }
+
+  tfoot td:first-child {
+    text-align: left;
+    padding-left: 1.2rem;
+  }
+
+  .laura-row td {
+    background: rgba(255, 107, 107, 0.08);
+    font-style: italic;
+  }
+
+  /* Payment links section */
+  .payments-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    margin-bottom: 2rem;
+  }
+
+  .payments-card h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .payments-card > p {
+    text-align: center;
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .pay-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+
+  .pay-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 1rem;
+    border-radius: 16px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .pay-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  }
+
+  .pay-btn:active { transform: translateY(0); }
+
+  .pay-btn .pay-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+  .pay-btn .pay-name { font-size: 1.1rem; margin-bottom: 0.2rem; }
+  .pay-btn .pay-sub { font-size: 0.75rem; opacity: 0.85; font-weight: 400; }
+
+  .pay-laura { background: linear-gradient(135deg, var(--coral), var(--sunset)); }
+  .pay-luis { background: linear-gradient(135deg, var(--ocean), var(--ocean-light)); }
+  .pay-pedram { background: linear-gradient(135deg, #6B46C1, #9F7AEA); }
+  .pay-tyler { background: linear-gradient(135deg, var(--mint), #38D9A9); }
+
+  .footer-note {
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.8rem;
+    padding: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 0.8rem; }
+    table { font-size: 0.78rem; }
+    thead th, tbody td { padding: 0.6rem 0.4rem; }
+    thead th:first-child, tbody td:first-child { padding-left: 0.6rem; }
+    .pay-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="header-emoji">💸</div>
+    <h1>Tarifa — Settle Up</h1>
+    <p>Who owes what to who. Tap a button below to pay!</p>
+  </div>
+
+  <div class="table-card">
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Person</th>
+            <th>Owes Laura</th>
+            <th>Owes Paul</th>
+            <th>Owes Luis</th>
+            <th>Owes Pedram</th>
+            <th>Owes Selin</th>
+            <th>Owes Tyler</th>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Paul</td>
+            <td>€146.44</td>
+            <td class="dash">—</td>
+            <td>€2.25</td>
+            <td>€3.38</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="total-cell">€152.07</td>
+          </tr>
+          <tr>
+            <td>Matt</td>
+            <td>€172.63</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td>€3.33</td>
+            <td>€32.50</td>
+            <td class="total-cell">€208.46</td>
+          </tr>
+          <tr>
+            <td>Vic</td>
+            <td>€201.03</td>
+            <td class="dash">—</td>
+            <td>€22.88</td>
+            <td>€44.00</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="total-cell">€267.91</td>
+          </tr>
+          <tr>
+            <td>Sara</td>
+            <td>€265.67</td>
+            <td class="dash">—</td>
+            <td>€22.88</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="total-cell">€288.55</td>
+          </tr>
+          <tr>
+            <td>Tyler</td>
+            <td>€321.48</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="total-cell">€321.48</td>
+          </tr>
+          <tr>
+            <td>Luis</td>
+            <td>€344.19</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td>€9.63</td>
+            <td class="total-cell">€353.82</td>
+          </tr>
+          <tr>
+            <td>Selin</td>
+            <td>€330.01</td>
+            <td class="dash">—</td>
+            <td>€9.54</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td>€101.50</td>
+            <td class="total-cell">€441.05</td>
+          </tr>
+          <tr>
+            <td>Pedram</td>
+            <td>€449.35</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td>€3.33</td>
+            <td>€32.50</td>
+            <td class="total-cell">€485.18</td>
+          </tr>
+          <tr>
+            <td>Alex</td>
+            <td>€616.03</td>
+            <td class="dash">—</td>
+            <td>€16.38</td>
+            <td>€37.50</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="total-cell">€669.91</td>
+          </tr>
+          <tr>
+            <td>Emmi</td>
+            <td>€630.35</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td>€72.33</td>
+            <td class="total-cell">€702.68</td>
+          </tr>
+          <tr class="laura-row">
+            <td>Laura</td>
+            <td class="dash">—</td>
+            <td>€122.68</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="dash">—</td>
+            <td class="total-cell">€122.68</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>TOTAL</td>
+            <td>€3,477.18</td>
+            <td>€122.68</td>
+            <td>€73.93</td>
+            <td>€84.88</td>
+            <td>€6.66</td>
+            <td>€248.46</td>
+            <td>€4,013.79</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div class="payments-card">
+    <h2>💳 Tap to Pay</h2>
+    <p>Click the button for the person you owe — it'll open their Revolut link</p>
+
+    <div class="pay-grid">
+      <a href="https://revolut.me/laura9ig" target="_blank" class="pay-btn pay-laura">
+        <div class="pay-emoji">👑</div>
+        <div class="pay-name">Pay Laura</div>
+        <div class="pay-sub">Revolut</div>
+      </a>
+
+      <a href="https://revolut.me/luishhhh" target="_blank" class="pay-btn pay-luis">
+        <div class="pay-emoji">🌊</div>
+        <div class="pay-name">Pay Luis</div>
+        <div class="pay-sub">Revolut</div>
+      </a>
+
+      <a href="https://revolut.me/pedramgkgb" target="_blank" class="pay-btn pay-pedram">
+        <div class="pay-emoji">🪁</div>
+        <div class="pay-name">Pay Pedram</div>
+        <div class="pay-sub">Revolut</div>
+      </a>
+
+      <a href="https://revolut.me/tylerjnr" target="_blank" class="pay-btn pay-tyler">
+        <div class="pay-emoji">🏄</div>
+        <div class="pay-name">Pay Tyler</div>
+        <div class="pay-sub">Revolut</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    🪁 Tarifa Birthday Weekend 2026 — Best trip ever 🌊
+  </div>
+
+</div>
+
+</body>
+</html>
